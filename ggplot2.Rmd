@@ -70,3 +70,57 @@ ggplot(data=se)+
   geom_point(aes(year, visitors, colour=state))+labs(x="Year", y="Visitation", "Calfifornia National Park Visitation")+theme_classic()+theme(legend.title=element_blank())+theme(axis.text.x = element_text(angle=90))
 ```
 
+#Faceting plots
+```{r}
+ggplot(data=se)+
+  geom_point(aes(year, visitors, colour=park_name))+labs(x="Year", y="Visitation", "Calfifornia National Park Visitation")+theme_bw()+theme(legend.title=element_blank())+facet_wrap(~state, scales="free")+theme(axis.text.x = element_text(angle=90))
+```
+
+#Geoms
+
+geom_jitter
+geom_violin
+alpha increases the transparency of the points
+colour inside aesthetics looks for a variable to make different colours, outside aesthetics colours all points one specific colour
+```{r}
+ggplot(data=se)+geom_jitter(aes(x=park_name, y=visitors), alpha=0.4, width= 0.1)+coord_flip()
+```
+
+```{r}
+ggplot(se) + geom_line(aes(x=year, y=visitors, colour= park_name))+ theme_bw()
+```
+Multiple geoms on one plot
+```{r}
+#ggplot(acadia)+ geom_point(aes(year, visitors))+geom_line(aes(year, visitors))+geom_smooth(aes(year, visitors))
+
+####Both creates the same plot, 2nd less redundant
+ggplot(acadia, aes(year, visitors))+ geom_point()+geom_line()+geom_smooth()
+```
+
+install and library ggthemes gives you more themes
+
+
+#Barcharts
+Only need an x variable 
+to get rid of a stacked plot use position= "dodge"
+```{r}
+ggplot(data=visit_16, aes(state, visitors, fill= park_name))+geom_bar(stat="identity")
+```
+
+#How to save a ggplot
+
+Can specify the size and resolution, can save as a pdf, jpeg etc.
+Can make plots interactive using,
+ggplotly
+```{r}
+myplot<-ggplot(data=visit_16, aes(state, visitors, fill= park_name))+geom_bar(stat="identity", position= "dodge")
+myplot
+
+#to save
+ggsave(filename = "myplot.jpg", myplot)
+```
+
+
+
+
+
