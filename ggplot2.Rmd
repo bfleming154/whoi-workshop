@@ -15,14 +15,58 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r}
+#install.packages('tidyverse')
+library(tidyverse)
+
+
+
 ```
 
-## Including Plots
+```{r}
+head(ca)
+View(ca)
+```
 
-You can also embed plots, for example:
+
 
 ```{r}
+#National Parks in California
+ca <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/ca.csv") 
 
+#Acadia National Park
+acadia <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/acadia.csv")
+
+#Southeast US National Parks
+se <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/se.csv")
+
+#2016 Visitation for all Pacific West National Parks
+visit_16 <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/visit_16.csv")
+
+#All Nationally designated sites in Massachusetts
+mass <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/mass.csv")
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Plot visitation to all CA National Parks over time
+geom_point == scatter plot
+```{r}
+ggplot(data=ca)+
+  geom_point(aes(year, visitors))
+```
+```{r}
+ggplot(data=ca)+
+  geom_point(aes(year, visitors, colour=park_name))
+```
+```{r}
+ggplot(data=ca)+
+  geom_point(aes(year, visitors, colour=park_name))+labs(x="Year", y="visitation", "Calfifornia National Park Visitation")+theme_bw()+theme(legend.title=element_blank())
+```
+
+
+```{r}
+head(se)
+ggplot(data=se)+
+  geom_point(aes(year, visitors, colour=state))+labs(x="Year", y="Visitation", "Calfifornia National Park Visitation")+theme_classic()+theme(legend.title=element_blank())+theme(axis.text.x = element_text(angle=90))
+```
+
