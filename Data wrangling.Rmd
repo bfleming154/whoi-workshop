@@ -4,7 +4,8 @@ output: html_document
 ---
 
 ```{r}
-library(tidyverse) #install.packages("tidyverse")
+library(tidyverse) #
+install.packages("tidyverse")
 ```
 
 
@@ -77,10 +78,33 @@ gapminder %>%
 max_gdp<-gapminder %>% filter(country %in% c("Egypt", "Vietnam")) %>%mutate(gdp=pop*gdpPercap) %>% mutate(max.gdp=max(gdp))
 max_gdp
 
+#same as
+max_gdp<-gapminder %>% filter(country %in% c("Egypt", "Vietnam")) %>%mutate(gdp=pop*gdpPercap,max.gdp=max(gdp))
 
 ```
 
+##Group by
+Allows you to do the same operation over all your sites
+cmdz undo
+```{r}
+gap_grouped <-gapminder %>% group_by(country) %>%mutate(gdp=pop*gdpPercap,max.gdp=max(gdp)) %>% ungroup()
+View(gap_grouped)
 
+#Summarise
+gap_summarise<-gapminder %>%  group_by(country) %>% mutate(gdp=pop*gdpPercap) %>% summarise(max_gdp=max(gdp)) %>%  ungroup()
+View(gap_summarise)
+```
+Summarise with group by
+
+#####Arrange columns
+
+```{r}
+##Arrange by max gdp, desc() gives descending order
+gap_summarise<-gapminder %>%  group_by(country) %>% mutate(gdp=pop*gdpPercap) %>% summarise(max_gdp=max(gdp)) %>%  ungroup() %>% arrange(desc(max_gdp))
+```
+
+E.g.
+*dplyr*::select shows what package the function comes from.
 
 
 
