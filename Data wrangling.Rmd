@@ -106,5 +106,32 @@ gap_summarise<-gapminder %>%  group_by(country) %>% mutate(gdp=pop*gdpPercap) %>
 E.g.
 *dplyr*::select shows what package the function comes from.
 
+##Joining data
+
+```{r}
+## read in the data. (same URL as yesterday, with co2.csv instead of gapminder.csv)
+co2 <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/co2.csv")
+
+####
+co2 %>% head()
+
+#####Creating a new gapminder variable with only 2007 data
+gap_2007<- gapminder %>% filter(year==2007)
+###142 observations (countries)
+
+###Left join, by -what you want to join the datasets by. 
+lj<- left_join(gap_2007, co2, by="country")
+###See if the number of observations matches what you expect
+#Could alternatively use %>% 
+
+####Right join
+rj<- right_join(gap_2007, co2)
+#If you don't specify it will choose a column that have identical names, better to say which one you want.
+#Left_joins may be easier to link into a chain of code. 
+#Need to consider which one you use if you refer to the column not by name but position.
+```
+
+
+
 
 
