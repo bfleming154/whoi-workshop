@@ -5,7 +5,7 @@ output: html_document
 
 ```{r}
 library(tidyverse) #
-install.packages("tidyverse")
+#install.packages("tidyverse")
 ```
 
 
@@ -130,6 +130,88 @@ rj<- right_join(gap_2007, co2)
 #Left_joins may be easier to link into a chain of code. 
 #Need to consider which one you use if you refer to the column not by name but position.
 ```
+#Making tidy data
+Every variable has a column, every observation has a row.
+
+```{r}
+## read in gapminder data in wide format
+gap_wide <- readr::read_csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder_wide.csv')
+colnames(gap_wide)
+##gather turns columns into rows (reduce the number of columns)
+
+```
+
+##tidyr::gather()
+```{r}
+gap_long<-gap_wide %>% 
+  gather(key= obstype_year, value= obs_values, -continent, -country)
+###Add - to keep certain columns the same. 
+##  Key takes the column names and makes them into a column; = new column name
+#Values takes the numbers and puts them into a separate column. 
+```
+
+##tidyr::separate()
+```{r}
+gap_long<-gap_wide %>% 
+  gather(key= obstype_year, value= obs_values, -continent, -country) %>% 
+  separate(col=obstype_year, into= c("obstype", "year"), sep="_", convert=TRUE)
+##sep what you want R to sep by.
+#Convert= TRUE, ensures that new columns are recognised as numeric or integer.
+```
+
+##plot long data
+```{r}
+canada_df<- gap_long %>% 
+  filter(country == "Canada", obstype=="lifeExp")
+ggplot(canada_df, aes(x=year, y=obs_values)) + 
+  geom_line() + 
+  theme_bw()
+```
+
+###Calculate and plot mean life expectancy.
+
+```{r}
+life_cont<- gap_long %>% 
+  filter(obstype =="lifeExp") %>% 
+    group_by(continent, year)%>%
+  filter(year>1981)  %>% 
+  summarise(mean_lifeExp= mean(obs_values)) %>% 
+  ungroup()
+#####group together if you want to keep both columns
+####This gets a mean lifeExp for each continent
+##Plotting
+ggplot(life_cont, aes(x=year, y=mean_lifeExp, colour=continent)) + 
+  geom_line() + 
+  theme_bw()
+```
+
+##Spread
+
+Long data set back into a wide data set.
+
+```{r}
+gap_normal<-gap_long %>% 
+  spread(key=obstype, value= obs_values)
+```
+
+```{r}
+?unite
+gap_wide2<- gap_long %>% unite (obstype_year,c("obstype","year"), sep="_", remove=TRUE) %>%
+  spread(key=obstype_year, value=obs_values)
+  
+##Don't necessarily need the c(""), could have just put obstype, year
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
